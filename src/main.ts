@@ -44,6 +44,7 @@ const getRandomIntInclusive = (min, max) => { // fix, не должно быть
 const renderLoader = () => {
   container.innerHTML = ""; // fix не должно быть null
 
+  // fix не должно быть null
   container.innerHTML = `
     <div class='loading'>
       <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
@@ -56,6 +57,7 @@ const renderUsersWithMood = (usersWithMood) => { // fix, не должно бы�
   container.innerHTML = ""; // fix не должно быть null
 
   usersWithMood.forEach((user) => { // fix, не должно быть any
+    // fix не должно быть null
     container.innerHTML += `
         <div class="user-item">
         <div class="row justify-between items-center">
@@ -77,7 +79,7 @@ const render = () => {
     return;
   }
 
-  let usersWithMood = getUsersWithMood(users); // fix, не должно быть any[]
+  const usersWithMood = getUsersWithMood(users); // fix, не должно быть any[]
 
   renderUsersWithMood(usersWithMood); // fix, не должно быть any
 };
