@@ -24,7 +24,7 @@ const fetchData = () => {
   }
 };
 
-// Получить новый массив usersWithMood из массива users, добавив каждому user св-во isGoodMood: true
+// Получить новый массив usersWithMood из массива users, добавив каждому user св-во isGoodMood: boolean
 const getUsersWithMood = (usersArr) => { // fix, не должно быть any
   return usersArr.map((user) => ({ // fix, не должно быть any
     ...user,
