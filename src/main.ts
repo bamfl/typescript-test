@@ -1,6 +1,6 @@
 import "./style.css";
 
-const container = document.querySelector(".container"); // fix не должно быть null
+const container = document.querySelector(".container");
 
 const url = "https://jsonplaceholder.typicode.com/users";
 
@@ -14,8 +14,8 @@ const fetchData = () => {
     isLoading = true;
     render();
 
-    // TODO: запрос данных (users) с сервера
-    // Присвоить данные в переменную users, при этом users не должно быть any
+    // TODO: запрос данных (users) с сервера с помощью fetch
+    // Присвоить данные в переменную users, при этом тип users не должно быть any
   } catch (error) {
     throw error;
   } finally {
