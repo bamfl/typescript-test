@@ -2,14 +2,43 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TS</title>
   </head>
 
   <body>
     <div id="app">
-      <div class="container"></div>
+      <div class="container">
+        <form class="add-form mb-20">
+          <div class="card">
+            <h2 class="mb-20">Add new Post</h2>
+
+            <div class="mb-20">
+              <label>
+                <div>Title</div>
+                <input type="text" class="title" />
+              </label>
+            </div>
+
+            <div class="mb-20">
+              <label>
+                <div>Body</div>
+                <input type="text" class="body" />
+              </label>
+            </div>
+
+            <button type="submit">Add</button>
+          </div>
+        </form>
+
+        <div>
+          <div class="card">
+            <h2 class="mb-20">Posts</h2>
+
+            <div class="posts"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script type="module" src="/src/main.ts"></script>

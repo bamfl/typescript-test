@@ -1,91 +1,98 @@
 import "./style.css";
+import axios from "axios";
+import jsonPlaceholderService from "./services.ts";
+import { INewPost, IPost } from "./types.ts";
 
-const container = document.querySelector(".container");
+// Типизируйте addForm с помощью Generic, чтобы его тип стал HTMLFormElement | null
+const addForm = document.querySelector<HTMLFormElement>(".add-form");
 
-const url = "https://jsonplaceholder.typicode.com/users";
+// Типизируйте input-ы с помощью Generic, чтобы его тип стал HTMLInputElement | null
+const titleInput = document.querySelector<HTMLInputElement>(".title");
+const bodyInput = document.querySelector<HTMLInputElement>(".body");
 
-let isLoading = false;
+// Типизируйте posts с помощью Generic, чтобы его тип стал HTMLDivElement | null
+const postsDiv = document.querySelector<HTMLDivElement>(".posts");
 
-let users = []; // fix, не должно быть any[]
-
-// Закончите и типизируйте функцию получения данных JSON из url.
-const fetchData = () => {
-  try {
-    isLoading = true;
-    render();
-
-    // TODO: запрос данных (users) с сервера с помощью fetch
-    // Присвоить данные в переменную users, при этом тип users не должно быть any
-  } catch (error) {
-    throw error;
-  } finally {
-    isLoading = false;
-    render();
-  }
-};
-
-// Получить новый массив usersWithMood из массива users, добавив каждому user св-во isGoodMood: boolean
-const getUsersWithMood = (usersArr) => { // fix, не должно быть any
-  return usersArr.map((user) => ({ // fix, не должно быть any
-    ...user,
-    isGoodMood: getRandomIntInclusive(0, 1), // fix, должно быть boolean, а не число
-  }));
-};
-
-// Получить рандомное число включая min, max
-const getRandomIntInclusive = (min, max) => { // fix, не должно быть any
-  min = Math.ceil(min);
-  max = Math.floor(max);
-
-  return Math.floor(Math.random() * (max - min + 1) + min);
-};
-
-// Render loader
-const renderLoader = () => {
-  container.innerHTML = ""; // fix не должно быть null
-
-  // fix не должно быть null
-  container.innerHTML = `
-    <div class='loading'>
-      <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-    </div>
-  `;
-};
-
-// Выведите данные в виде карточек с классом .user-item в html
-const renderUsersWithMood = (usersWithMood) => { // fix, не должно быть any
-  container.innerHTML = ""; // fix не должно быть null
-
-  usersWithMood.forEach((user) => { // fix, не должно быть any
-    // fix не должно быть null
-    container.innerHTML += `
-        <div class="user-item">
-        <div class="row justify-between items-center">
-          <div>
-            <div>UserItem {{ Вывести id }}</div>
-            <p>{{ Вывести name }}</p>
-            <p>{{ Вывести email }}</p>
-          </div>
-          <button>{{ Вывести "Good mood" or "Bad mood" в зависимости от isGoodMood}}</button>
+const addPostToPostsDiv = (post: IPost) => {
+  if (postsDiv) {
+    postsDiv.innerHTML += `
+      <div class="post mb-20">
+        <div class="row justify-between">
+          <div>Title: ${post.title.toUpperCase()}</div>
+          <div>ID: ${post.id}</div>
         </div>
+        <div>Body: ${post.body}</div>
       </div>
     `;
-  });
-};
-
-const render = () => {
-  if (isLoading) {
-    renderLoader();
-    return;
   }
-
-  const usersWithMood = getUsersWithMood(users); // fix, не должно быть any[]
-
-  renderUsersWithMood(usersWithMood); // fix, не должно быть any
 };
+
+const handleError = (error: unknown) => {
+  // Типизируйте error
+  if (axios.isAxiosError(error)) {
+    console.log("error message: ", error.message);
+
+    return error.message;
+  } else if (error instanceof Error) {
+    console.log("unexpected error: ", error.message);
+
+    return "An unexpected error occurred";
+  } else {
+    console.log("error message: ", error);
+
+    return "An unexpected error occurred";
+  }
+};
+
+const getPosts = async () => {
+  try {
+    let posts: IPost[] = [];
+
+    const response = await jsonPlaceholderService.getPosts();
+
+    posts = response.data; // Переделать на деструктуризацию, избавиться от let posts: IPost[] = [];
+
+    if (postsDiv) postsDiv.innerHTML = "";
+
+    posts = posts.filter((post) => post.id > 98);
+
+    posts.forEach(addPostToPostsDiv);
+  } catch (error: unknown) {
+    handleError(error);
+  }
+};
+
+const addPost = async () => {
+  try {
+    if (titleInput && bodyInput) {
+      const newPost: INewPost = {
+        title: titleInput.value,
+        body: bodyInput.value,
+        userId: 1,
+      };
+
+      const response = await jsonPlaceholderService.addPost(newPost);
+
+      const post = response.data; // Переделать на деструктуризацию
+
+      addPostToPostsDiv(post);
+      addForm?.reset();
+    }
+  } catch (error: unknown) {
+    handleError(error);
+  }
+};
+
+if (addForm) {
+  addForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    await addPost();
+  });
+}
 
 const onMounted = async () => {
-  await fetchData();
+  await getPosts();
 };
 
 onMounted();
