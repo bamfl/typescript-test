@@ -1,11 +1,11 @@
 import axios from "axios";
-import { ContentTypes, INewPost, IPost } from "./types";
+// Импортировать типы
 
 const config = {
   baseURL: "https://jsonplaceholder.typicode.com",
   headers: {
-    "Content-Type": ContentTypes.APPLICATION_JSON,
-    Accept: ContentTypes.APPLICATION_JSON,
+    "Content-Type": "application/json", // заменить на перечисление
+    Accept: "application/json", // заменить на перечисление
   },
 };
 
@@ -14,12 +14,13 @@ const httpClient = axios.create(config);
 class JSONPlaceholderService {
   async getPosts() {
     // Типизируйте метод get с помощью Generic и типом IPost чтобы возвращаемый тип был Promise<AxiosResponse<IPost[], any>>
-    return await httpClient.get<IPost[]>("/posts");
+    return await httpClient.get("/posts");
   }
 
-  async addPost(post: INewPost) {
+  async addPost(post) {
+    // Типизировать INewPost
     // Типизируйте метод get с помощью Generic и типом IPost чтобы возвращаемый тип был Promise<AxiosResponse<IPost, any>>
-    return await httpClient.post<IPost>("/posts", post);
+    return await httpClient.post("/posts", post);
   }
 }
 

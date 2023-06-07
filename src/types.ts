@@ -1,16 +1,9 @@
+// Типы можно посмотреть тут: https://jsonplaceholder.typicode.com/guide/
+
 // Создать перечисления типов контента ContentTypes со значениями: "application/json", "multipart/form-data", "text/html"
-export enum ContentTypes {
-  APPLICATION_JSON = "application/json",
-  FORM_DATA = "multipart/form-data",
-  TEXT_HTML = "text/html",
-}
 
-export interface INewPost {
-  title: string;
-  body: string;
-  userId: number;
-}
+// Создать interface INewPost
 
-export interface IPost extends INewPost {
-  id: number;
-}
+// Создать interface IPost наследующийся от INewPost
+
+// Экспортировать типы

@@ -1,19 +1,20 @@
 import "./style.css";
 import axios from "axios";
 import jsonPlaceholderService from "./services.ts";
-import { INewPost, IPost } from "./types.ts";
+// Импортировать типы
 
 // Типизируйте addForm с помощью Generic, чтобы его тип стал HTMLFormElement | null
-const addForm = document.querySelector<HTMLFormElement>(".add-form");
+const addForm = document.querySelector(".add-form");
 
 // Типизируйте input-ы с помощью Generic, чтобы его тип стал HTMLInputElement | null
-const titleInput = document.querySelector<HTMLInputElement>(".title");
-const bodyInput = document.querySelector<HTMLInputElement>(".body");
+const titleInput = document.querySelector(".title");
+const bodyInput = document.querySelector(".body");
 
 // Типизируйте posts с помощью Generic, чтобы его тип стал HTMLDivElement | null
-const postsDiv = document.querySelector<HTMLDivElement>(".posts");
+const postsDiv = document.querySelector(".posts");
 
-const addPostToPostsDiv = (post: IPost) => {
+// Типизируйте post
+const addPostToPostsDiv = (post) => {
   if (postsDiv) {
     postsDiv.innerHTML += `
       <div class="post mb-20">
@@ -27,30 +28,21 @@ const addPostToPostsDiv = (post: IPost) => {
   }
 };
 
+// Типизируйте error
 const handleError = (error: unknown) => {
-  // Типизируйте error
-  if (axios.isAxiosError(error)) {
-    console.log("error message: ", error.message);
-
-    return error.message;
-  } else if (error instanceof Error) {
-    console.log("unexpected error: ", error.message);
-
-    return "An unexpected error occurred";
-  } else {
-    console.log("error message: ", error);
-
-    return "An unexpected error occurred";
-  }
+  // Проверьте, является ли axios.isAxiosError(error), тогда верните message из error
+  // Проверьте, является ли instanceof Error тогда верните message из error
+  // Иначе верните строку "An unexpected error occurred"
 };
 
 const getPosts = async () => {
   try {
-    let posts: IPost[] = [];
+    let posts = []; // Типизируйте posts
 
+    // Типизируйте jsonPlaceholderService.getPosts(), он должен возврать Promise<AxiosResponse<IPost[], any>>
     const response = await jsonPlaceholderService.getPosts();
 
-    posts = response.data; // Переделать на деструктуризацию, избавиться от let posts: IPost[] = [];
+    posts = response.data; // posts должен получиться типом IPost массивом
 
     if (postsDiv) postsDiv.innerHTML = "";
 
@@ -65,7 +57,7 @@ const getPosts = async () => {
 const addPost = async () => {
   try {
     if (titleInput && bodyInput) {
-      const newPost: INewPost = {
+      const newPost = { // Тип нового поста INewPost
         title: titleInput.value,
         body: bodyInput.value,
         userId: 1,
