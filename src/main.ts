@@ -39,7 +39,7 @@ const getPosts = async () => {
   try {
     let posts = []; // Типизируйте posts
 
-    // Типизируйте jsonPlaceholderService.getPosts(), он должен возврать Promise<AxiosResponse<IPost[], any>>
+    // Типизируйте jsonPlaceholderService.getPosts(), он должен возвращать Promise<AxiosResponse<IPost[], any>>
     const response = await jsonPlaceholderService.getPosts();
 
     posts = response.data; // posts должен получиться типом IPost массивом
@@ -57,12 +57,14 @@ const getPosts = async () => {
 const addPost = async () => {
   try {
     if (titleInput && bodyInput) {
-      const newPost = { // Тип нового поста INewPost
+      const newPost = {
+        // Тип нового поста INewPost
         title: titleInput.value,
         body: bodyInput.value,
         userId: 1,
       };
 
+      // Типизируйте jsonPlaceholderService.addPost(), он должен возвращать Promise<AxiosResponse<IPost, any>>
       const response = await jsonPlaceholderService.addPost(newPost);
 
       const post = response.data; // Переделать на деструктуризацию
